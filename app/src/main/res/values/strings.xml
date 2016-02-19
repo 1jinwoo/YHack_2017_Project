@@ -4,5 +4,6 @@
     <string name="app_name">Simple Tweets</string>
     <string name="login_label">Connect to Twitter</string>
     <string name="title_activity_timeline"> Home </string>
+    <string name="button_tweet_label">TWEET</string>
 
 </resources>
