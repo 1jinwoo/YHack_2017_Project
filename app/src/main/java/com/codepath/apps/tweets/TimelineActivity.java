@@ -54,14 +54,28 @@ public class TimelineActivity extends AppCompatActivity {
 
         client = TwitterApplication.getRestClient();
         populateTimeline();
+
+        lvTweets.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                populateTimeline();
+                return true;
+            }
+        });
     }
 
     private void populateTimeline() {
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
+        long lastTweetId = -1;
+        if (!timeline.isEmpty()) {
+            Tweet oldestTweet = timeline.get(timeline.size() - 1);
+            lastTweetId = oldestTweet.getUid();
+        }
+
+        client.getHomeTimeline(lastTweetId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.i("INFO", response.toString());
-                for (int i = 0; i < response.length(); i ++ ) {
+                for (int i = 0; i < response.length(); i++) {
                     try {
                         JSONObject tweetJSON = response.getJSONObject(i);
                         timeline.add(Tweet.fromJSON(tweetJSON));
