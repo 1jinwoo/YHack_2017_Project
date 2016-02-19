@@ -36,6 +36,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         TextView tvUsername = (TextView) convertView.findViewById(R.id.tvUsername);
         TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
         TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
+        TextView tvTime= (TextView) convertView.findViewById(R.id.tvTime);
 
 
         ivProfileImage.setImageResource(0);
@@ -44,6 +45,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         tvUsername.setText("@" + tweet.getUser().getScreenName());
         tvName.setText(tweet.getUser().getName());
         tvBody.setText(tweet.getBody());
+        tvTime.setText(tweet.getRelativeTimestamp());
 
         return convertView;
     }

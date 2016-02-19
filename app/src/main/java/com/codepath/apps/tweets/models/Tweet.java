@@ -1,12 +1,20 @@
 package com.codepath.apps.tweets.models;
 
+import android.text.format.DateUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * Created by nidhikulkarni on 2/16/16.
  */
 public class Tweet {
+
+    private static String twitterTimestampFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
     private String body;
     private long uid;
@@ -23,6 +31,23 @@ public class Tweet {
 
     public String getCreatedAt() {
         return createdAt;
+    }
+
+    public String getRelativeTimestamp() {
+        SimpleDateFormat sf = new SimpleDateFormat(twitterTimestampFormat, Locale.ENGLISH);
+        sf.setLenient(true);
+
+        String relativeDate = "";
+        try {
+            long dateMillis = sf.parse(createdAt).getTime();
+            relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
+                    System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS, DateUtils.FORMAT_ABBREV_ALL).toString();
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return relativeDate;
     }
 
     public User getUser() {

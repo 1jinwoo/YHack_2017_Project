@@ -14,7 +14,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="Nidhi Kulkarni"
         android:id="@+id/tvName"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/ivProfileImage"
@@ -24,7 +24,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="Working on Codepath!"
         android:id="@+id/tvBody"
         android:layout_below="@+id/tvName"
         android:layout_toRightOf="@+id/ivProfileImage"
@@ -34,11 +34,22 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="\@nidhik82"
         android:id="@+id/tvUsername"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/tvName"
         android:layout_toEndOf="@+id/tvName"
-        android:layout_marginLeft="26dp"
-        android:layout_marginStart="26dp" />
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="15h"
+        android:id="@+id/tvTime"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/tvBody"
+        android:layout_marginRight="10dp"/>
 </RelativeLayout>
