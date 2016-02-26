@@ -27,9 +27,9 @@
     <fragment
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:name="fragments.TweetListFragment"
+        android:name="fragments.HomeTimelineFragment"
         tools:layout="@layout/fragment_tweets_list"
-        android:id="@+id/fragment_tweets_list"
+        android:id="@+id/fragment_home_timeline"
         android:layout_gravity="top|start"
         android:layout_below="@+id/view" />
 

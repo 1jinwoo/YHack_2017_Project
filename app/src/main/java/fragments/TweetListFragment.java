@@ -1,6 +1,5 @@
 package fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,21 +19,13 @@ import java.util.List;
 /**
  * Created by nidhikulkarni on 2/25/16.
  */
-public class TweetListFragment extends Fragment {
+public abstract class TweetListFragment extends Fragment {
 
     private List<Tweet> timeline;
 
     private TweetsArrayAdapter adapter;
 
     private ListView lvTweets;
-
-    private TweetListDataSource dataSource;
-
-    public interface TweetListDataSource {
-
-        public void loadMoreData();
-    }
-
 
     // Inflation logic
 
@@ -49,7 +40,7 @@ public class TweetListFragment extends Fragment {
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public boolean onLoadMore(int page, int totalItemsCount) {
-                dataSource.loadMoreData();
+                loadMoreData();
                 return true;
             }
         });
@@ -65,14 +56,9 @@ public class TweetListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         timeline = new ArrayList<>();
         adapter = new TweetsArrayAdapter(getActivity(), timeline);
-
-        Activity activity = getActivity();
-        if (!(activity instanceof TweetListDataSource)) {
-            throw new ClassCastException(activity.getClass().getName() + " must implement TweetListDataSource.");
-        }
-
-        dataSource = (TweetListDataSource) activity;
     }
+
+    // API
 
     public void addAll(List<Tweet> tweets) {
         timeline.addAll(0, tweets);
@@ -83,10 +69,10 @@ public class TweetListFragment extends Fragment {
         Tweet oldestTweet = null;
         if (!timeline.isEmpty()) {
             oldestTweet = timeline.get(timeline.size() - 1);
-
         }
         return oldestTweet;
     }
 
+    public abstract void loadMoreData();
 
 }
