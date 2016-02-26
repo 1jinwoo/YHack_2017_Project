@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -32,6 +34,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -83,7 +86,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
 
         @Override
         public Fragment getItem(int position) {
-            // these will get cached for you
+            // note: these will get cached for you
             switch (position) {
                 case 0:
                     return new HomeTimelineFragment();
@@ -103,5 +106,20 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
         public CharSequence getPageTitle(int position) {
             return tabTitles[position];
         }
+    }
+
+    public void onProfileView(MenuItem mi) {
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_timeline, menu);
+        return true;
     }
 }
