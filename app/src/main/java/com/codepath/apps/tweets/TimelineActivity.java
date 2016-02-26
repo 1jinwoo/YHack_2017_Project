@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.codepath.apps.tweets.models.Tweet;
@@ -18,18 +17,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class TimelineActivity extends AppCompatActivity {
+import fragments.TweetListFragment;
+
+public class TimelineActivity extends AppCompatActivity implements TweetListFragment.TweetListDataSource {
 
     private TwitterClient client;
-
-    private List<Tweet> timeline;
-
-    private TweetsArrayAdapter adapter;
-
-    private ListView lvTweets;
-
+    private TweetListFragment fragmentTweetsList;
     private ComposeTweetFragment composeFragment;
 
     @Override
@@ -47,27 +43,22 @@ public class TimelineActivity extends AppCompatActivity {
             }
         });
 
-        lvTweets = (ListView) findViewById(R.id.lvTweets);
-        timeline = new ArrayList<>();
-        adapter = new TweetsArrayAdapter(this, timeline);
-        lvTweets.setAdapter(adapter);
-
         client = TwitterApplication.getRestClient();
-        populateTimeline();
 
-        lvTweets.setOnScrollListener(new EndlessScrollListener() {
-            @Override
-            public boolean onLoadMore(int page, int totalItemsCount) {
-                populateTimeline();
-                return true;
-            }
-        });
+        if (savedInstanceState == null) {
+            fragmentTweetsList = (TweetListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_tweets_list);
+        } else {
+            //activity is already in memory, inflated already
+        }
+
+
+        populateTimeline();
     }
 
     private void populateTimeline() {
         long lastTweetId = -1;
-        if (!timeline.isEmpty()) {
-            Tweet oldestTweet = timeline.get(timeline.size() - 1);
+        Tweet oldestTweet = fragmentTweetsList.getOldestTweet();
+        if (oldestTweet != null) {
             lastTweetId = oldestTweet.getUid();
         }
 
@@ -75,16 +66,17 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.i("INFO", response.toString());
+                List<Tweet> tweets = new ArrayList<Tweet>();
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         JSONObject tweetJSON = response.getJSONObject(i);
-                        timeline.add(Tweet.fromJSON(tweetJSON));
+                        tweets.add(Tweet.fromJSON(tweetJSON));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
 
-                adapter.notifyDataSetChanged();
+                fragmentTweetsList.addAll(tweets);
             }
 
             @Override
@@ -101,8 +93,7 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.i("INFO", response.toString());
-                timeline.add(0, Tweet.fromJSON(response));
-                adapter.notifyDataSetChanged();
+                fragmentTweetsList.addAll(Arrays.asList(Tweet.fromJSON(response)));
             }
 
             @Override
@@ -135,4 +126,8 @@ public class TimelineActivity extends AppCompatActivity {
         composeFragment.dismiss();
     }
 
+    @Override
+    public void loadMoreData() {
+        populateTimeline();
+    }
 }
