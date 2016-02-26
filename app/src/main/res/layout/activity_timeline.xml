@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
-        android:id="@+id/view">
+        android:id="@+id/appbar">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -24,14 +24,24 @@
     </android.support.design.widget.AppBarLayout>
 
 
-    <fragment
+   <com.astuetz.PagerSlidingTabStrip
+       android:layout_width="match_parent"
+       android:layout_height="50dp"
+       app:pstsShouldExpand="true"
+       app:pstsTextAllCaps="true"
+       android:id="@+id/tabs"
+       android:layout_below="@+id/appbar"
+       >
+   </com.astuetz.PagerSlidingTabStrip>
+
+    <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:name="fragments.HomeTimelineFragment"
-        tools:layout="@layout/fragment_tweets_list"
-        android:id="@+id/fragment_home_timeline"
-        android:layout_gravity="top|start"
-        android:layout_below="@+id/view" />
+        android:id="@+id/viewpager"
+        android:background="@android:color/white"
+        android:layout_below="@+id/tabs">
+
+    </android.support.v4.view.ViewPager>
 
 
     <android.support.design.widget.FloatingActionButton

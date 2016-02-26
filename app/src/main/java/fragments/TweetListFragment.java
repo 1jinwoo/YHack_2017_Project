@@ -61,7 +61,7 @@ public abstract class TweetListFragment extends Fragment {
     // API
 
     public void addAll(List<Tweet> tweets) {
-        timeline.addAll(0, tweets);
+        timeline.addAll(tweets);
         adapter.notifyDataSetChanged();
     }
 
