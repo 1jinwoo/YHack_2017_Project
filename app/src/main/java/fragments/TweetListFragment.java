@@ -1,5 +1,6 @@
 package fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -56,12 +57,23 @@ public abstract class TweetListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         timeline = new ArrayList<>();
         adapter = new TweetsArrayAdapter(getActivity(), timeline);
+
+        Activity activity = getActivity();
+        if (!(activity instanceof TweetsArrayAdapter.UserSelectedListener)) {
+            throw new ClassCastException(activity.getClass().getName() + " must implement the UserSelectedListener interface.");
+        }
+        adapter.setListener((TweetsArrayAdapter.UserSelectedListener) activity);
     }
 
     // API
 
     public void addAll(List<Tweet> tweets) {
         timeline.addAll(tweets);
+        adapter.notifyDataSetChanged();
+    }
+
+    public void add(int index, Tweet tweet) {
+        timeline.add(index, tweet);
         adapter.notifyDataSetChanged();
     }
 

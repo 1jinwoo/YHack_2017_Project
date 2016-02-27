@@ -15,17 +15,16 @@ import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.tweets.models.Tweet;
-
-import java.util.Arrays;
+import com.codepath.apps.tweets.models.User;
 
 import fragments.ComposeTweetFragment;
 import fragments.HomeTimelineFragment;
 import fragments.MentionsTimelineFragment;
 import fragments.TweetListFragment;
 
-public class TimelineActivity extends AppCompatActivity implements ComposeTweetFragment.ComposeTweetListener {
+public class TimelineActivity extends AppCompatActivity implements ComposeTweetFragment.ComposeTweetListener, TweetsArrayAdapter.UserSelectedListener {
 
-    private TweetListFragment fragmentHomeTimeline;
+
     private ComposeTweetFragment composeFragment;
     private ViewPager viewPager;
     private TweetsPagerAdapter pagerAdapter;
@@ -67,19 +66,28 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
         composeFragment.dismiss();
     }
 
+
     public void handleCancelClicked(View view) {
         composeFragment.dismiss();
     }
 
     @Override
     public void onTweetCreated(Tweet tweet) {
-        fragmentHomeTimeline.addAll(Arrays.asList(tweet));
+        pagerAdapter.addTweet(0, tweet);
+    }
+
+    public void handleUserSelected(User user) {
+        Intent i = new Intent(this, ProfileActivity.class);
+        i.putExtra("screen_name", user.getScreenName());
+        startActivity(i);
     }
 
     public class TweetsPagerAdapter extends FragmentPagerAdapter {
 
         final int PAGES_COUNT = 2;
         private String tabTitles[] = {"Home", "Mentions"};
+        private TweetListFragment fragmentHomeTimeline;
+        private TweetListFragment fragmentMentionsTimeline;
 
         public TweetsPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
@@ -90,9 +98,11 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
             // note: these will get cached for you
             switch (position) {
                 case 0:
-                    return new HomeTimelineFragment();
+                    fragmentHomeTimeline = new HomeTimelineFragment();
+                    return fragmentHomeTimeline;
                 case 1:
-                    return new MentionsTimelineFragment();
+                    fragmentMentionsTimeline = new MentionsTimelineFragment();
+                    return fragmentMentionsTimeline;
             }
 
             return null;
@@ -106,6 +116,12 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
         @Override
         public CharSequence getPageTitle(int position) {
             return tabTitles[position];
+        }
+
+        public void addTweet(int index, Tweet tweet) {
+            if (fragmentHomeTimeline != null) {
+                fragmentHomeTimeline.add(0, tweet);
+            }
         }
     }
 
@@ -124,4 +140,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
         getMenuInflater().inflate(R.menu.menu_timeline, menu);
         return true;
     }
+
+
 }

@@ -16,7 +16,7 @@ import org.json.JSONObject;
 
 import fragments.UserTimelineFragment;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements TweetsArrayAdapter.UserSelectedListener {
 
     private TwitterClient client;
     private User user;
@@ -30,7 +30,34 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         client = TwitterApplication.getRestClient();
-        client.getUserInfo(new JsonHttpResponseHandler() {
+
+
+        if (savedInstanceState == null) {
+            // get screen name
+            String screenName = getIntent().getStringExtra("screen_name");
+            if (screenName == null) {
+                getCurrentUserInfo();
+            } else {
+                getUserInfo(screenName);
+            }
+            UserTimelineFragment timelineFragment = UserTimelineFragment.newInstance(screenName);
+
+            // display user fragment
+            FragmentTransaction trns = getSupportFragmentManager().beginTransaction();
+            trns.replace(R.id.flContainer, timelineFragment);
+            trns.commit();
+        }
+
+
+    }
+
+    @Override
+    public void handleUserSelected(User user) {
+        // FIXME: do nothing here since we would just reload ourselves
+    }
+
+    private void getUserInfo(String screenName) {
+        client.getUserInfo(screenName, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 user = User.fromJSON(response);
@@ -43,23 +70,25 @@ public class ProfileActivity extends AppCompatActivity {
                 super.onFailure(statusCode, headers, responseString, throwable); // FIXME: do something real
             }
         });
-
-        if (savedInstanceState == null) {
-            // get screen name
-            String screenName = getIntent().getStringExtra("screen_name");
-            UserTimelineFragment timelineFragment = UserTimelineFragment.newInstance(screenName);
-
-            // display user fragment
-            FragmentTransaction trns = getSupportFragmentManager().beginTransaction();
-            trns.replace(R.id.flContainer, timelineFragment);
-            trns.commit();
-        }
-
-
-
     }
 
-    public void populateProfileHeader(User user) {
+    private void getCurrentUserInfo() {
+        client.getCurrentUserInfo(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                user = User.fromJSON(response);
+                getSupportActionBar().setTitle("@" + user.getScreenName());
+                populateProfileHeader(user);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable); // FIXME: do something real
+            }
+        });
+    }
+
+    private void populateProfileHeader(User user) {
         // load header info
 
         TextView tvName = (TextView) findViewById(R.id.tvName);

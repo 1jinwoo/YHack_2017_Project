@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.tweets.models.Tweet;
+import com.codepath.apps.tweets.models.User;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -18,14 +19,23 @@ import java.util.List;
  */
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
+    private UserSelectedListener listener;
+
+    public interface UserSelectedListener {
+        public void handleUserSelected(User user);
+    }
 
     public TweetsArrayAdapter(Context context, List<Tweet> tweets) {
         super(context, android.R.layout.simple_list_item_1, tweets);
     }
 
+    public void setListener(UserSelectedListener listener) {
+        this.listener = listener;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Tweet tweet = this.getItem(position);
+        final Tweet tweet = this.getItem(position);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet, parent, false);
@@ -38,6 +48,12 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
         TextView tvTime= (TextView) convertView.findViewById(R.id.tvTime);
 
+        ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleUserSelected(tweet.getUser());
+            }
+        });
 
         ivProfileImage.setImageResource(0);
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageURL()).into(ivProfileImage);
@@ -47,6 +63,13 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         tvBody.setText(tweet.getBody());
         tvTime.setText(tweet.getRelativeTimestamp());
 
+
         return convertView;
     }
+
+    public void handleUserSelected(User user) {
+        listener.handleUserSelected(user);
+    }
+
+
 }
