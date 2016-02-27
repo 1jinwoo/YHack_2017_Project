@@ -1,5 +1,6 @@
 package com.codepath.apps.tweets;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -109,7 +110,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
     }
 
     public void onProfileView(MenuItem mi) {
-
+        Intent i = new Intent(this, ProfileActivity.class);
+        startActivity(i);
     }
 
     @Override
