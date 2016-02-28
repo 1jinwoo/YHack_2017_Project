@@ -1,23 +1,22 @@
 # Twitter Clone
 An Android clone of the Twitter app.
 
-Time spent: about 10 hours spent in total 
+Time spent: about 5 hours spent in total 
 
 Completed user stories:
 
-* [x] User can sign in to Twitter using OAuth login (2 points)
-* [x] User can view the tweets from their home timeline
-* [x] User should be displayed the username, name, and body for each tweet (2 points)
-* [x] User should be displayed the relative timestamp for each tweet "8m", "7h" (1 point)
-* [x] User can view more tweets as they scroll with infinite pagination (1 point)
-* [x] User can compose a new tweet
-* [x] User can click a “Compose” icon in the Action Bar on the top right (1 point)
-* [x] User can then enter a new tweet and post this to twitter (2 points)
-* [x] User is taken back to home timeline with new tweet visible in timeline (1 point)
-* [x] Bonus: Compose activity is replaced with a modal overlay (2 points)
-* [x] Bonus: Move the "Compose" action to a FloatingActionButton instead of on the AppBar. (1 point)
+* [x] Includes all required user stories from Week 3 Twitter Client
+* [x] User can switch between Timeline and Mention views using tabs. (4 points)
+* [x] User can view their home timeline tweets.
+* [x] User can view the recent mentions of their username.
+* [x] User can navigate to view their own profile (3 points)
+* [x] User can see picture, tagline, # of followers, # of following, and tweets on their profile.
+* [x] User can click on the profile image in any tweet to see another user's profile. (2 points)
+* [x] User can see picture, tagline, # of followers, # of following, and tweets of clicked user.
+* [x] Profile view should include that user's timeline
+* [x] User can infinitely paginate any of these timelines (home, mentions, user) by scrolling to the bottom (1 point)
 
 Walkthrough of all user stories:
 
-![Video Walkthrough](https://github.com/nidhik/TwitterAndroid/blob/master/codepath-assignment-week3-android.gif)
+![Video Walkthrough](https://github.com/nidhik/TwitterAndroid/blob/master/codepath-assignment-week4-android.gif)
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
